@@ -12,20 +12,22 @@ import (
 func InitServer(server models.ServerDetail) error {
 	// 检查请求IP是否为IP格式
 	if addr := net.ParseIP(server.Address); addr == nil {
-		return errors.New(fmt.Sprintf("无效的IP地址 %s", server.Address))
+		return errors.New(fmt.Sprintf("无效的IP地址: %s", server.Address))
 	}
 
 	// 检查主机是否存活
 	conn, err := net.DialTimeout("ip:icmp", server.Address, 1*time.Second)
 	if err != nil {
-		return errors.New(fmt.Sprintf("服务器检测存活失败 %s", server.Address))
+		return errors.New(fmt.Sprintf("服务器检测存活失败: %s", server.Address))
 	}
 	defer conn.Close()
 
 	var client SSHClient
 	client = NewClient(server)
+	defer client.Close()
+
 	// 安装常用的应用包
-	if _, err = client.RemoteExec("yum install -y wget vim ntpdate sysstat curl epel-release telnet git"); err != nil {
+	if _, err = client.RemoteExec("yum install -y wget vim ntpdate curl epel-release telnet git"); err != nil {
 		return errors.New(fmt.Sprintf("%s 安装程序包错误: %v", server.Address, err))
 	}
 
@@ -35,7 +37,7 @@ func InitServer(server models.ServerDetail) error {
 	}
 
 	// 设置服务器同步时间
-	if _, err = client.RemoteExec(fmt.Sprintf("echo '*/5 * * * * ntpdate ntp1.aliyun.com &> /dev/null' > ")); err != nil {
+	if _, err = client.RemoteExec(fmt.Sprintf("echo '*/5 * * * * root ntpdate ntp1.aliyun.com &> /dev/null' > /etc/cron.d/ntpdate ")); err != nil {
 		return errors.New(fmt.Sprintf("%s 设置同步时间错误: %v", server.Address, err))
 	}
 
@@ -44,12 +46,27 @@ func InitServer(server models.ServerDetail) error {
 		return errors.New(fmt.Sprintf("%s 设置内核参数错误: %v", server.Address, err))
 	}
 
-	//
+	// 关闭防火墙
+	if _, err = client.RemoteExec("systemctl disable firewalld && systemctl stop firewalld"); err != nil {
+		return errors.New(fmt.Sprintf("%s 关闭防火墙失败: %v", server.Address, err))
+	}
 
+	// disable selinux
+	if _, err = client.RemoteExec("setenforce 0 && sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config"); err != nil {
+		return errors.New(fmt.Sprintf("%s 关闭selinux失败: %v", server.Address, err))
+	}
 
-	//
+	// 关闭swap
+	if _, err = client.RemoteExec("swapoff -a && sed -i 's/.*swap.*/#&/' /etc/fstab"); err != nil {
+		return errors.New(fmt.Sprintf("%s 关闭swap失败: %v", server.Address, err))
+	}
 
-	// 关闭会话
-	client.Close()
 	return nil
+}
+
+func InitServers(server models.ServerDetail, errChan chan string) {
+	err := InitServer(server)
+	if err != nil {
+		errChan <- err.Error()
+	}
 }

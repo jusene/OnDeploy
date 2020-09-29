@@ -33,6 +33,96 @@ info:
   title: 应用交付部署服务
   version: "1.0"
 paths:
+  /app/git/install:
+    post:
+      consumes:
+      - application/json
+      description: Git服务安装
+      parameters:
+      - description: server
+        in: body
+        name: server
+        required: true
+        schema:
+          $ref: '#/definitions/models.ServerDetail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      summary: Git服务安装
+      tags:
+      - Git服务
+  /app/nfs/install:
+    post:
+      consumes:
+      - application/json
+      description: NFS服务安装
+      parameters:
+      - description: server
+        in: body
+        name: server
+        required: true
+        schema:
+          $ref: '#/definitions/models.ServerDetail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      summary: NFS服务安装
+      tags:
+      - NFS服务
+  /app/rabbitmq/install:
+    post:
+      consumes:
+      - application/json
+      description: RabbitMQ服务安装
+      parameters:
+      - description: server
+        in: body
+        name: server
+        required: true
+        schema:
+          $ref: '#/definitions/models.ServerDetail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      summary: RabbitMQ服务安装
+      tags:
+      - RabbitMQ服务
   /server/init:
     post:
       consumes:

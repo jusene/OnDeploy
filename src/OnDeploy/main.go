@@ -26,12 +26,12 @@ func main() {
 		v1.POST("/servers/init", controllers.ServersInit)
 
 		// 应用部署
-		v1.POST("/app/rabbitmq", controllers.RabbitMQInstall)
-		v1.POST("/app/git", controllers.GitInstall)
-		v1.POST("/app/nfs", controllers.NFSInstall)
+		v1.POST("/app/rabbitmq/install", controllers.RabbitMQInstall)
+		v1.POST("/app/git/install", controllers.GitInstall)
+		v1.POST("/app/nfs/install", controllers.NFSInstall)
 	}
 
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run(":9000")
 }
 

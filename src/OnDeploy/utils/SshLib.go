@@ -35,12 +35,12 @@ func NewClient(server models.ServerDetail) *Client {
 
 	sshClient, err := ssh.Dial("tcp", fmt.Sprintf("%s:%d", server.Address, server.Port), conf)
 	if err != nil {
-		return nil
+		panic(fmt.Sprintf("创建ssh连接 %s:%d 失败: %v", server.Address, server.Port, err))
 	}
 
 	sftpClient, err := sftp.NewClient(sshClient)
 	if err != nil {
-		return nil
+		panic(fmt.Sprintf("创建sftp连接 %s:%d 失败: %v", server.Address, server.Port, err))
 	}
 
 	return &Client{

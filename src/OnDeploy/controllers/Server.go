@@ -69,19 +69,28 @@ func ServersInit(ctx *gin.Context) {
 
 	// 并发初始化服务器
 	var wg sync.WaitGroup
+	errChan := make(chan string, 5)
 	for _, server := range servers {
 		wg.Add(1)
-		go func() {
+		go func(server models.ServerDetail, errChan chan string) {
 			defer wg.Done()
-			if err := utils.InitServer(server); err != nil {
-				ctx.JSON(http.StatusInternalServerError, models.Err{
-					Code: http.StatusInternalServerError,
-					Message: err.Error(),
-				})
-			}
-		}()
+			utils.InitServers(server, errChan)
+		}(server, errChan)
 	}
 	wg.Wait()
 
+	for e := range errChan {
+		ctx.JSON(http.StatusInternalServerError, models.Err{
+			Code: http.StatusInternalServerError,
+			Message: e,
+		})
+		close(errChan)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.Res{
+		Code:    http.StatusOK,
+		Message: fmt.Sprintf("服务器初始化成功"),
+	})
 	return
 }
