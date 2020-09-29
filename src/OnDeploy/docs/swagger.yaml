@@ -1,0 +1,99 @@
+basePath: /api/v1
+definitions:
+  models.Err:
+    $ref: '#/definitions/models.Res'
+  models.Res:
+    properties:
+      code:
+        type: integer
+      msg:
+        type: string
+    type: object
+  models.ServerDetail:
+    properties:
+      address:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      port:
+        type: integer
+      username:
+        type: string
+    type: object
+  models.ServersDetail:
+    items:
+      $ref: '#/definitions/models.ServerDetail'
+    type: array
+info:
+  contact: {}
+  description: 应用交付部署服务API
+  license: {}
+  title: 应用交付部署服务
+  version: "1.0"
+paths:
+  /server/init:
+    post:
+      consumes:
+      - application/json
+      description: 单台服务器初始化
+      parameters:
+      - description: server
+        in: body
+        name: server
+        required: true
+        schema:
+          $ref: '#/definitions/models.ServerDetail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      summary: 单台服务器初始化
+      tags:
+      - 服务器
+  /servers/init:
+    post:
+      consumes:
+      - application/json
+      description: 批量服务器初始化
+      parameters:
+      - description: servers
+        in: body
+        name: server
+        required: true
+        schema:
+          $ref: '#/definitions/models.ServersDetail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      summary: 批量服务器初始化
+      tags:
+      - 服务器
+schemes:
+- http
+- https
+swagger: "2.0"
