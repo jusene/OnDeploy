@@ -26,25 +26,25 @@ func InitServer(server models.ServerDetail) error {
 	client = NewClient(server)
 	// 安装常用的应用包
 	if _, err = client.RemoteExec("yum install -y wget vim ntpdate sysstat curl epel-release telnet git"); err != nil {
-		return errors.New(fmt.Sprintf("安装程序包错误: %v", err))
+		return errors.New(fmt.Sprintf("%s 安装程序包错误: %v", server.Address, err))
 	}
 
 	// 设置服务器主机名
 	if _, err = client.RemoteExec(fmt.Sprintf("hostnamectl set-hostname %s", server.Name)); err != nil {
-		return errors.New(fmt.Sprintf("设置服务器主机名错误: %v", err))
+		return errors.New(fmt.Sprintf("%s 设置服务器主机名错误: %v", server.Address, err))
 	}
 
 	// 设置服务器同步时间
 	if _, err = client.RemoteExec(fmt.Sprintf("echo '*/5 * * * * ntpdate ntp1.aliyun.com &> /dev/null' > ")); err != nil {
-		return errors.New(fmt.Sprintf("设置同步时间错误: %v", err))
+		return errors.New(fmt.Sprintf("%s 设置同步时间错误: %v", server.Address, err))
 	}
 
 	// 设置内核参数
 	if _, err = client.RemotePut(templates.SysConfig, "/etc/sysctl.conf"); err != nil {
-		return errors.New(fmt.Sprintf("设置内核参数错误: %v", err))
+		return errors.New(fmt.Sprintf("%s 设置内核参数错误: %v", server.Address, err))
 	}
 
-
+	//
 
 
 	//
