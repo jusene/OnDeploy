@@ -1,7 +1,23 @@
 basePath: /api/v1
 definitions:
+  models.CommonRabbitUser:
+    properties:
+      address:
+        type: string
+      user:
+        type: string
+    type: object
   models.Err:
     $ref: '#/definitions/models.Res'
+  models.NewRabbitUser:
+    properties:
+      address:
+        type: string
+      pass:
+        type: string
+      user:
+        type: string
+    type: object
   models.Res:
     properties:
       code:
@@ -121,6 +137,184 @@ paths:
           schema:
             $ref: '#/definitions/models.Err'
       summary: RabbitMQ服务安装
+      tags:
+      - RabbitMQ服务
+  /app/rabbitmq/user/add:
+    put:
+      consumes:
+      - application/json
+      description: RabbitMQ用户添加
+      parameters:
+      - description: user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.NewRabbitUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      summary: RabbitMQ用户添加
+      tags:
+      - RabbitMQ服务
+  /app/rabbitmq/user/del:
+    delete:
+      consumes:
+      - application/json
+      description: RabbitMQ用户删除
+      parameters:
+      - description: user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.CommonRabbitUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      summary: RabbitMQ用户删除
+      tags:
+      - RabbitMQ服务
+  /app/rabbitmq/user/lst/{address}:
+    get:
+      consumes:
+      - application/json
+      description: RabbitMQ用户列表
+      parameters:
+      - description: address
+        in: path
+        name: address
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      summary: RabbitMQ用户列表
+      tags:
+      - RabbitMQ服务
+  /app/rabbitmq/vhost/add:
+    put:
+      consumes:
+      - application/json
+      description: RabbitMQ虚拟机添加
+      parameters:
+      - description: user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.NewRabbitUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      summary: RabbitMQ虚拟机添加
+      tags:
+      - RabbitMQ服务
+  /app/rabbitmq/vhost/del:
+    delete:
+      consumes:
+      - application/json
+      description: RabbitMQ虚拟机删除
+      parameters:
+      - description: server
+        in: body
+        name: server
+        required: true
+        schema:
+          $ref: '#/definitions/models.ServerDetail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      summary: RabbitMQ虚拟机删除
+      tags:
+      - RabbitMQ服务
+  /app/rabbitmq/vhost/lst/{address}:
+    get:
+      consumes:
+      - application/json
+      description: RabbitMQ虚拟机列表
+      parameters:
+      - description: address
+        in: path
+        name: address
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      summary: RabbitMQ虚拟机列表
       tags:
       - RabbitMQ服务
   /server/init:

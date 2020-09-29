@@ -27,11 +27,22 @@ func main() {
 
 		// 应用部署
 		v1.POST("/app/rabbitmq/install", controllers.RabbitMQInstall)
+		v1.PUT("/app/rabbitmq/vhost/add", controllers.RabbitMQVhostAdd)
+		v1.DELETE("/app/rabbitmq/vhost/del", controllers.RabbitMQVhostDel)
+		v1.GET("/app/rabbitmq/vhost/lst/:address", controllers.RabbitMQVhostLst)
+		v1.PUT("/app/rabbitmq/user/add", controllers.RabbitMQUserAdd)
+		v1.DELETE("/app/rabbitmq/user/del", controllers.RabbitMQUserDel)
+		v1.GET("/app/rabbitmq/user/lst/:address", controllers.RabbitMQUserLst)
+		// v1.PUT("/app/rabbitmq/perssion/add", controllers.RabbitMQPerssionAdd)
+		// v1.DELETE("/app/rabbitmq/perssion/del", controllers.RabbitMQPerssionDel)
+		// v1.GET("/app/rabbitmq/perssion/lst", controllers.RabbitMQPerssionLst)
+
+
 		v1.POST("/app/git/install", controllers.GitInstall)
 		v1.POST("/app/nfs/install", controllers.NFSInstall)
 	}
 
-	router.GET("/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run(":9000")
 }
 

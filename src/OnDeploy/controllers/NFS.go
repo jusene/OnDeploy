@@ -3,6 +3,7 @@ package controllers
 import (
 	"OnDeploy/models"
 	"OnDeploy/utils"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -36,4 +37,8 @@ func NFSInstall(ctx *gin.Context) {
 		return
 	}
 
+	ctx.JSON(http.StatusOK, models.Res{
+		Code:    http.StatusOK,
+		Message: fmt.Sprintf("%s nfs服务安装成功", server.Address),
+	})
 }
