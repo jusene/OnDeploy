@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func InitServer(server models.ServerDetail) error {
+func InitServer(server models.ServerDetail, user, pass string) error {
 	// 检查请求IP是否为IP格式
 	if addr := net.ParseIP(server.Address); addr == nil {
 		return errors.New(fmt.Sprintf("无效的IP地址: %s", server.Address))
@@ -23,7 +23,7 @@ func InitServer(server models.ServerDetail) error {
 	defer conn.Close()
 
 	var client SSHClient
-	client = NewClient(server)
+	client = NewClient(server, user, pass)
 	defer client.Close()
 
 	// 安装常用的应用包
@@ -64,8 +64,8 @@ func InitServer(server models.ServerDetail) error {
 	return nil
 }
 
-func InitServers(server models.ServerDetail, errChan chan string) {
-	err := InitServer(server)
+func InitServers(server models.ServerDetail, user, pass string, errChan chan string) {
+	err := InitServer(server, user, pass)
 	if err != nil {
 		errChan <- err.Error()
 	}

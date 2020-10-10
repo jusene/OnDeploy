@@ -14,12 +14,23 @@ import (
 // @Tags RabbitMQ服务
 // @Accept json
 // @Produce json
+// @Security basic
 // @Param server body models.ServerDetail true "server"
 // @Success 200 {object} models.Res
 // @Failure 400 {object} models.Err
+// @Failure 401 {object} models.Err
 // @Failure 500 {object} models.Err
 // @Router /app/rabbitmq/install [post]
 func RabbitMQInstall(ctx *gin.Context) {
+	user, pass, err := utils.AuthRequired(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, models.Err{
+			Code: http.StatusUnauthorized,
+			Message: err.Error(),
+		})
+		return
+	}
+
 	var server models.ServerDetail
 	// 检查请求json
 	if err := ctx.ShouldBindJSON(&server); err != nil {
@@ -30,7 +41,7 @@ func RabbitMQInstall(ctx *gin.Context) {
 		return
 	}
 
-	if err := utils.InstallRabbitMQ(server); err != nil {
+	if err := utils.InstallRabbitMQ(server, user, pass); err != nil {
 		ctx.JSON(http.StatusInternalServerError, models.Err{
 			Code: http.StatusInternalServerError,
 			Message: err.Error(),
@@ -49,12 +60,35 @@ func RabbitMQInstall(ctx *gin.Context) {
 // @Tags RabbitMQ服务
 // @Accept json
 // @Produce json
-// @Param user body models.NewRabbitUser true "user"
+// @Param vhost body models.NewRabbitVhost true "vhost"
 // @Success 200 {object} models.Res
 // @Failure 400 {object} models.Err
 // @Failure 500 {object} models.Err
 // @Router /app/rabbitmq/vhost/add [put]
 func RabbitMQVhostAdd(ctx *gin.Context) {
+	var vhost models.NewRabbitVhost
+	if err := ctx.ShouldBindJSON(&vhost);err != nil {
+		ctx.JSON(http.StatusBadRequest, models.Err{
+			Code: http.StatusBadRequest,
+			Message: err.Error(),
+		})
+		return
+	}
+
+	var rabbitapi utils.Rabbit
+	rabbitapi = utils.NewRabbitApi(vhost.Address, "guest", "guest", 15672)
+	if err := rabbitapi.AddVhost(vhost.Vhost, vhost.Trace); err != nil {
+		ctx.JSON(http.StatusInternalServerError, models.Err{
+			Code: http.StatusInternalServerError,
+			Message: err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.Err{
+		Code: http.StatusOK,
+		Message: fmt.Sprintf("%s 虚拟机添加成功", vhost.Vhost),
+	})
 
 
 }
@@ -64,13 +98,35 @@ func RabbitMQVhostAdd(ctx *gin.Context) {
 // @Tags RabbitMQ服务
 // @Accept json
 // @Produce json
-// @Param server body models.ServerDetail true "server"
+// @Param vhost body models.NewRabbitVhost true "vhost"
 // @Success 200 {object} models.Res
 // @Failure 400 {object} models.Err
 // @Failure 500 {object} models.Err
 // @Router /app/rabbitmq/vhost/del [delete]
 func RabbitMQVhostDel(ctx *gin.Context) {
+	var vhost models.NewRabbitVhost
+	if err := ctx.ShouldBindJSON(&vhost);err != nil {
+		ctx.JSON(http.StatusBadRequest, models.Err{
+			Code: http.StatusBadRequest,
+			Message: err.Error(),
+		})
+		return
+	}
 
+	var rabbitapi utils.Rabbit
+	rabbitapi = utils.NewRabbitApi(vhost.Address, "guest", "guest", 15672)
+	if err := rabbitapi.DelVhost(vhost.Vhost); err != nil {
+		ctx.JSON(http.StatusInternalServerError, models.Err{
+			Code: http.StatusInternalServerError,
+			Message: err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.Err{
+		Code: http.StatusOK,
+		Message: fmt.Sprintf("%s 虚拟机删除成功", vhost.Vhost),
+	})
 }
 
 // @Summary RabbitMQ虚拟机列表
@@ -213,4 +269,109 @@ func RabbitMQUserLst(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, users)
+}
+
+// @Summary RabbitMQ权限列表
+// @Description RabbitMQ权限列表
+// @Tags RabbitMQ服务
+// @Accept json
+// @Produce json
+// @Param address path string true "address"
+// @Success 200 {object} models.Res
+// @Failure 400 {object} models.Err
+// @Failure 500 {object} models.Err
+// @Router /app/rabbitmq/permission/lst/{address} [get]
+func RabbitMQPermissionLst(ctx *gin.Context) {
+	address := ctx.Param("address")
+	var rabbitapi utils.Rabbit
+	rabbitapi = utils.NewRabbitApi(address, "guest", "guest", 15672)
+	ret, err := rabbitapi.LstPermission()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, models.Err{
+			Code: http.StatusInternalServerError,
+			Message: err.Error(),
+		})
+	}
+	var permissions models.RabbitPermissions
+	err = json.Unmarshal([]byte(ret), &permissions)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, models.Err{
+			Code: http.StatusInternalServerError,
+			Message: err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, permissions)
+}
+
+// @Summary RabbitMQ权限添加
+// @Description RabbitMQ权限添加
+// @Tags RabbitMQ服务
+// @Accept json
+// @Produce json
+// @Param permission body models.NewRabbitPermission true "permission"
+// @Success 200 {object} models.Res
+// @Failure 400 {object} models.Err
+// @Failure 500 {object} models.Err
+// @Router /app/rabbitmq/permission/add [put]
+func RabbitMQPermissionAdd(ctx *gin.Context) {
+	var permission models.NewRabbitPermission
+	if err := ctx.ShouldBindJSON(&permission); err != nil {
+		ctx.JSON(http.StatusBadRequest, models.Err{
+			Code: http.StatusBadRequest,
+			Message: err.Error(),
+		})
+		return
+	}
+
+	var rabbitapi utils.Rabbit
+	rabbitapi = utils.NewRabbitApi(permission.Address, "guest", "guest", 15672)
+	if err := rabbitapi.AddPermission(&permission); err != nil {
+		ctx.JSON(http.StatusInternalServerError, models.Err{
+			Code: http.StatusInternalServerError,
+			Message: err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.Err{
+		Code: http.StatusOK,
+		Message: fmt.Sprintf("%s 用户权限添加成功", permission.User),
+	})
+}
+
+// @Summary RabbitMQ权限删除
+// @Description RabbitMQ权限删除
+// @Tags RabbitMQ服务
+// @Accept json
+// @Produce json
+// @Param permission body models.ComRabbitPermission true "permission"
+// @Success 200 {object} models.Res
+// @Failure 400 {object} models.Err
+// @Failure 500 {object} models.Err
+// @Router /app/rabbitmq/permission/del [delete]
+func RabbitMQPermissionDel(ctx *gin.Context) {
+	var permission models.ComRabbitPermission
+	if err := ctx.ShouldBindJSON(&permission); err != nil {
+		ctx.JSON(http.StatusBadRequest, models.Err{
+			Code: http.StatusBadRequest,
+			Message: err.Error(),
+		})
+		return
+	}
+
+	var rabbitapi utils.Rabbit
+	rabbitapi = utils.NewRabbitApi(permission.Address, "guest", "guest", 15672)
+	if err := rabbitapi.DelPermission(&permission); err != nil {
+		ctx.JSON(http.StatusInternalServerError, models.Err{
+			Code: http.StatusInternalServerError,
+			Message: err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.Err{
+		Code: http.StatusOK,
+		Message: fmt.Sprintf("%s 用户权限删除成功", permission.User),
+	})
 }

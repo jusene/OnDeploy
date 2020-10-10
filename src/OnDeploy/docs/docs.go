@@ -27,6 +27,11 @@ var doc = `{
     "paths": {
         "/app/git/install": {
             "post": {
+                "security": [
+                    {
+                        "basic": []
+                    }
+                ],
                 "description": "Git服务安装",
                 "consumes": [
                     "application/json"
@@ -45,7 +50,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.ServerDetail"
+                            "$ref": "#/definitions/models.GITDetail"
                         }
                     }
                 ],
@@ -62,6 +67,297 @@ var doc = `{
                             "$ref": "#/definitions/models.Err"
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/git/repo/add": {
+            "put": {
+                "security": [
+                    {
+                        "basic": []
+                    }
+                ],
+                "description": "Git仓库创建",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Git服务"
+                ],
+                "summary": "Git仓库创建",
+                "parameters": [
+                    {
+                        "description": "server",
+                        "name": "server",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.GITDetail"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/git/repo/del": {
+            "delete": {
+                "security": [
+                    {
+                        "basic": []
+                    }
+                ],
+                "description": "Git仓库删除",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Git服务"
+                ],
+                "summary": "Git仓库删除",
+                "parameters": [
+                    {
+                        "description": "server",
+                        "name": "server",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.GITDetail"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/git/user/add": {
+            "post": {
+                "security": [
+                    {
+                        "basic": []
+                    }
+                ],
+                "description": "Git用户添加",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Git服务"
+                ],
+                "summary": "Git用户添加",
+                "parameters": [
+                    {
+                        "description": "server",
+                        "name": "server",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.GITDetail"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/git/user/del": {
+            "delete": {
+                "security": [
+                    {
+                        "basic": []
+                    }
+                ],
+                "description": "Git用户删除",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Git服务"
+                ],
+                "summary": "Git用户删除",
+                "parameters": [
+                    {
+                        "description": "server",
+                        "name": "server",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.GITDetail"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/git/user/update": {
+            "put": {
+                "security": [
+                    {
+                        "basic": []
+                    }
+                ],
+                "description": "Git用户密码修改",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Git服务"
+                ],
+                "summary": "Git用户密码修改",
+                "parameters": [
+                    {
+                        "description": "server",
+                        "name": "server",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.GITDetail"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -73,6 +369,11 @@ var doc = `{
         },
         "/app/nfs/install": {
             "post": {
+                "security": [
+                    {
+                        "basic": []
+                    }
+                ],
                 "description": "NFS服务安装",
                 "consumes": [
                     "application/json"
@@ -108,6 +409,181 @@ var doc = `{
                             "$ref": "#/definitions/models.Err"
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/nfs/path/add": {
+            "put": {
+                "security": [
+                    {
+                        "basic": []
+                    }
+                ],
+                "description": "NFS服务创建",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "NFS服务"
+                ],
+                "summary": "NFS服务创建",
+                "parameters": [
+                    {
+                        "description": "nfs",
+                        "name": "nfs",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.NFSPath"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/nfs/path/del": {
+            "delete": {
+                "security": [
+                    {
+                        "basic": []
+                    }
+                ],
+                "description": "NFS服务删除",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "NFS服务"
+                ],
+                "summary": "NFS服务删除",
+                "parameters": [
+                    {
+                        "description": "nfs",
+                        "name": "nfs",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.NFSInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/nfs/path/lst/{address}": {
+            "get": {
+                "security": [
+                    {
+                        "basic": []
+                    }
+                ],
+                "description": "NFS服务查看",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "NFS服务"
+                ],
+                "summary": "NFS服务查看",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "address",
+                        "name": "address",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -119,6 +595,11 @@ var doc = `{
         },
         "/app/rabbitmq/install": {
             "post": {
+                "security": [
+                    {
+                        "basic": []
+                    }
+                ],
                 "description": "RabbitMQ服务安装",
                 "consumes": [
                     "application/json"
@@ -139,6 +620,148 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/models.ServerDetail"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/rabbitmq/permission/add": {
+            "put": {
+                "description": "RabbitMQ权限添加",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RabbitMQ服务"
+                ],
+                "summary": "RabbitMQ权限添加",
+                "parameters": [
+                    {
+                        "description": "permission",
+                        "name": "permission",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.NewRabbitPermission"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/rabbitmq/permission/del": {
+            "delete": {
+                "description": "RabbitMQ权限删除",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RabbitMQ服务"
+                ],
+                "summary": "RabbitMQ权限删除",
+                "parameters": [
+                    {
+                        "description": "permission",
+                        "name": "permission",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ComRabbitPermission"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/rabbitmq/permission/lst/{address}": {
+            "get": {
+                "description": "RabbitMQ权限列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RabbitMQ服务"
+                ],
+                "summary": "RabbitMQ权限列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "address",
+                        "name": "address",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -314,12 +937,12 @@ var doc = `{
                 "summary": "RabbitMQ虚拟机添加",
                 "parameters": [
                     {
-                        "description": "user",
-                        "name": "user",
+                        "description": "vhost",
+                        "name": "vhost",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.NewRabbitUser"
+                            "$ref": "#/definitions/models.NewRabbitVhost"
                         }
                     }
                 ],
@@ -360,12 +983,12 @@ var doc = `{
                 "summary": "RabbitMQ虚拟机删除",
                 "parameters": [
                     {
-                        "description": "server",
-                        "name": "server",
+                        "description": "vhost",
+                        "name": "vhost",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.ServerDetail"
+                            "$ref": "#/definitions/models.NewRabbitVhost"
                         }
                     }
                 ],
@@ -437,6 +1060,11 @@ var doc = `{
         },
         "/server/init": {
             "post": {
+                "security": [
+                    {
+                        "basic": []
+                    }
+                ],
                 "description": "单台服务器初始化",
                 "consumes": [
                     "application/json"
@@ -472,6 +1100,12 @@ var doc = `{
                             "$ref": "#/definitions/models.Err"
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -483,6 +1117,11 @@ var doc = `{
         },
         "/servers/init": {
             "post": {
+                "security": [
+                    {
+                        "basic": []
+                    }
+                ],
                 "description": "批量服务器初始化",
                 "consumes": [
                     "application/json"
@@ -518,6 +1157,12 @@ var doc = `{
                             "$ref": "#/definitions/models.Err"
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -529,6 +1174,20 @@ var doc = `{
         }
     },
     "definitions": {
+        "models.ComRabbitPermission": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                },
+                "vhost": {
+                    "type": "string"
+                }
+            }
+        },
         "models.CommonRabbitUser": {
             "type": "object",
             "properties": {
@@ -543,6 +1202,100 @@ var doc = `{
         "models.Err": {
             "$ref": "#/definitions/models.Res"
         },
+        "models.GITDetail": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "git_pass": {
+                    "type": "string"
+                },
+                "git_path": {
+                    "type": "string"
+                },
+                "git_port": {
+                    "type": "integer"
+                },
+                "git_repo": {
+                    "type": "string"
+                },
+                "git_user": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "port": {
+                    "description": "Username string ` + "`" + `json:\"username,omitempty\"` + "`" + `\nPassword string ` + "`" + `json:\"password,omitempty\"` + "`" + `",
+                    "type": "integer"
+                }
+            }
+        },
+        "models.NFSInfo": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.NFSPath": {
+            "type": "object",
+            "properties": {
+                "acl": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "param": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "path": {
+                    "type": "string"
+                },
+                "port": {
+                    "description": "Username string ` + "`" + `json:\"username,omitempty\"` + "`" + `\nPassword string ` + "`" + `json:\"password,omitempty\"` + "`" + `",
+                    "type": "integer"
+                }
+            }
+        },
+        "models.NewRabbitPermission": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "configure": {
+                    "type": "string"
+                },
+                "read": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                },
+                "vhost": {
+                    "type": "string"
+                },
+                "write": {
+                    "type": "string"
+                }
+            }
+        },
         "models.NewRabbitUser": {
             "type": "object",
             "properties": {
@@ -553,6 +1306,20 @@ var doc = `{
                     "type": "string"
                 },
                 "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.NewRabbitVhost": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "tracing": {
+                    "type": "boolean"
+                },
+                "vhost": {
                     "type": "string"
                 }
             }
@@ -577,14 +1344,9 @@ var doc = `{
                 "name": {
                     "type": "string"
                 },
-                "password": {
-                    "type": "string"
-                },
                 "port": {
+                    "description": "Username string ` + "`" + `json:\"username,omitempty\"` + "`" + `\nPassword string ` + "`" + `json:\"password,omitempty\"` + "`" + `",
                     "type": "integer"
-                },
-                "username": {
-                    "type": "string"
                 }
             }
         },
@@ -593,6 +1355,11 @@ var doc = `{
             "items": {
                 "$ref": "#/definitions/models.ServerDetail"
             }
+        }
+    },
+    "securityDefinitions": {
+        "basic": {
+            "type": "basic"
         }
     }
 }`

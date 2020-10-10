@@ -14,12 +14,23 @@ import (
 // @Tags 服务器
 // @Accept json
 // @Produce json
+// @Security basic
 // @Param server body models.ServerDetail true "server"
 // @Success 200 {object} models.Res
 // @Failure 400 {object} models.Err
+// @Failure 401 {object} models.Err
 // @Failure 500 {object} models.Err
 // @Router /server/init [post]
 func ServerInit(ctx *gin.Context) {
+	user, pass, err := utils.AuthRequired(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, models.Err{
+			Code: http.StatusUnauthorized,
+			Message: err.Error(),
+		})
+		return
+	}
+
 	var server models.ServerDetail
 	// 检查请求json
 	if err := ctx.ShouldBindJSON(&server); err != nil {
@@ -31,7 +42,7 @@ func ServerInit(ctx *gin.Context) {
 	}
 
 	// 初始化服务器
-	if err := utils.InitServer(server); err != nil {
+	if err := utils.InitServer(server, user, pass); err != nil {
 		ctx.JSON(http.StatusInternalServerError, models.Err{
 			Code: http.StatusInternalServerError,
 			Message: err.Error(),
@@ -51,12 +62,23 @@ func ServerInit(ctx *gin.Context) {
 // @Tags 服务器
 // @Accept json
 // @Produce json
+// @Security basic
 // @Param server body models.ServersDetail true "servers"
 // @Success 200 {object} models.Res
 // @Failure 400 {object} models.Err
+// @Failure 401 {object} models.Err
 // @Failure 500 {object} models.Err
 // @Router /servers/init [post]
 func ServersInit(ctx *gin.Context) {
+	user, pass, err := utils.AuthRequired(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, models.Err{
+			Code: http.StatusUnauthorized,
+			Message: err.Error(),
+		})
+		return
+	}
+
 	var servers models.ServersDetail
 	// 检查请求json
 	if err := ctx.ShouldBindJSON(&servers); err != nil {
@@ -74,7 +96,7 @@ func ServersInit(ctx *gin.Context) {
 		wg.Add(1)
 		go func(server models.ServerDetail, errChan chan string) {
 			defer wg.Done()
-			utils.InitServers(server, errChan)
+			utils.InitServers(server, user, pass, errChan)
 		}(server, errChan)
 	}
 	wg.Wait()

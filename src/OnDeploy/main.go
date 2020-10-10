@@ -11,6 +11,9 @@ import (
 // @Title 应用交付部署服务
 // @Version 1.0
 // @Description 应用交付部署服务API
+// @SecurityDefinitions.Basic basic
+// @In header
+// @Name Authorization
 // @Schemes http https
 // @BasePath /api/v1
 func main() {
@@ -33,13 +36,26 @@ func main() {
 		v1.PUT("/app/rabbitmq/user/add", controllers.RabbitMQUserAdd)
 		v1.DELETE("/app/rabbitmq/user/del", controllers.RabbitMQUserDel)
 		v1.GET("/app/rabbitmq/user/lst/:address", controllers.RabbitMQUserLst)
-		// v1.PUT("/app/rabbitmq/perssion/add", controllers.RabbitMQPerssionAdd)
-		// v1.DELETE("/app/rabbitmq/perssion/del", controllers.RabbitMQPerssionDel)
-		// v1.GET("/app/rabbitmq/perssion/lst", controllers.RabbitMQPerssionLst)
-
+		v1.PUT("/app/rabbitmq/permission/add", controllers.RabbitMQPermissionAdd)
+		v1.DELETE("/app/rabbitmq/permission/del", controllers.RabbitMQPermissionDel)
+		v1.GET("/app/rabbitmq/permission/lst/:address", controllers.RabbitMQPermissionLst)
 
 		v1.POST("/app/git/install", controllers.GitInstall)
+		v1.PUT("/app/git/repo/add", controllers.GitRepoAdd)
+		v1.DELETE("/app/git/repo/del", controllers.GitRepoDel)
+		v1.POST("/app/git/user/add", controllers.GitUserAdd)
+		v1.PUT("/app/git/user/update", controllers.GitUserUpdate)
+		v1.DELETE("/app/git/user/del", controllers.GitUserDel)
+
 		v1.POST("/app/nfs/install", controllers.NFSInstall)
+		v1.PUT("/app/nfs/path/add", controllers.NFSPathAdd)
+		v1.GET("/app/nfs/path/lst/:address", controllers.NFSPathLst)
+		v1.DELETE("app/nfs/path/del", controllers.NFSPathDel)
+
+		v1.POST("/app/redis/install", controllers.RedisInstall)
+
+		v1.POST("/app/docker/install", controllers.DockerInstall)
+		v1.POST("/app/dockers/install", controllers.DockersInstall)
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

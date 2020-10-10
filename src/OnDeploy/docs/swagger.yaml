@@ -1,5 +1,14 @@
 basePath: /api/v1
 definitions:
+  models.ComRabbitPermission:
+    properties:
+      address:
+        type: string
+      user:
+        type: string
+      vhost:
+        type: string
+    type: object
   models.CommonRabbitUser:
     properties:
       address:
@@ -9,6 +18,72 @@ definitions:
     type: object
   models.Err:
     $ref: '#/definitions/models.Res'
+  models.GITDetail:
+    properties:
+      address:
+        type: string
+      git_pass:
+        type: string
+      git_path:
+        type: string
+      git_port:
+        type: integer
+      git_repo:
+        type: string
+      git_user:
+        type: string
+      name:
+        type: string
+      port:
+        description: |-
+          Username string `json:"username,omitempty"`
+          Password string `json:"password,omitempty"`
+        type: integer
+    type: object
+  models.NFSInfo:
+    properties:
+      address:
+        type: string
+      path:
+        type: string
+      port:
+        type: integer
+    type: object
+  models.NFSPath:
+    properties:
+      acl:
+        type: string
+      address:
+        type: string
+      name:
+        type: string
+      param:
+        items:
+          type: string
+        type: array
+      path:
+        type: string
+      port:
+        description: |-
+          Username string `json:"username,omitempty"`
+          Password string `json:"password,omitempty"`
+        type: integer
+    type: object
+  models.NewRabbitPermission:
+    properties:
+      address:
+        type: string
+      configure:
+        type: string
+      read:
+        type: string
+      user:
+        type: string
+      vhost:
+        type: string
+      write:
+        type: string
+    type: object
   models.NewRabbitUser:
     properties:
       address:
@@ -16,6 +91,15 @@ definitions:
       pass:
         type: string
       user:
+        type: string
+    type: object
+  models.NewRabbitVhost:
+    properties:
+      address:
+        type: string
+      tracing:
+        type: boolean
+      vhost:
         type: string
     type: object
   models.Res:
@@ -31,12 +115,11 @@ definitions:
         type: string
       name:
         type: string
-      password:
-        type: string
       port:
+        description: |-
+          Username string `json:"username,omitempty"`
+          Password string `json:"password,omitempty"`
         type: integer
-      username:
-        type: string
     type: object
   models.ServersDetail:
     items:
@@ -60,7 +143,7 @@ paths:
         name: server
         required: true
         schema:
-          $ref: '#/definitions/models.ServerDetail'
+          $ref: '#/definitions/models.GITDetail'
       produces:
       - application/json
       responses:
@@ -72,11 +155,197 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Err'
+      security:
+      - basic: []
       summary: Git服务安装
+      tags:
+      - Git服务
+  /app/git/repo/add:
+    put:
+      consumes:
+      - application/json
+      description: Git仓库创建
+      parameters:
+      - description: server
+        in: body
+        name: server
+        required: true
+        schema:
+          $ref: '#/definitions/models.GITDetail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      security:
+      - basic: []
+      summary: Git仓库创建
+      tags:
+      - Git服务
+  /app/git/repo/del:
+    delete:
+      consumes:
+      - application/json
+      description: Git仓库删除
+      parameters:
+      - description: server
+        in: body
+        name: server
+        required: true
+        schema:
+          $ref: '#/definitions/models.GITDetail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      security:
+      - basic: []
+      summary: Git仓库删除
+      tags:
+      - Git服务
+  /app/git/user/add:
+    post:
+      consumes:
+      - application/json
+      description: Git用户添加
+      parameters:
+      - description: server
+        in: body
+        name: server
+        required: true
+        schema:
+          $ref: '#/definitions/models.GITDetail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      security:
+      - basic: []
+      summary: Git用户添加
+      tags:
+      - Git服务
+  /app/git/user/del:
+    delete:
+      consumes:
+      - application/json
+      description: Git用户删除
+      parameters:
+      - description: server
+        in: body
+        name: server
+        required: true
+        schema:
+          $ref: '#/definitions/models.GITDetail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      security:
+      - basic: []
+      summary: Git用户删除
+      tags:
+      - Git服务
+  /app/git/user/update:
+    put:
+      consumes:
+      - application/json
+      description: Git用户密码修改
+      parameters:
+      - description: server
+        in: body
+        name: server
+        required: true
+        schema:
+          $ref: '#/definitions/models.GITDetail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      security:
+      - basic: []
+      summary: Git用户密码修改
       tags:
       - Git服务
   /app/nfs/install:
@@ -102,11 +371,124 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Err'
+      security:
+      - basic: []
       summary: NFS服务安装
+      tags:
+      - NFS服务
+  /app/nfs/path/add:
+    put:
+      consumes:
+      - application/json
+      description: NFS服务创建
+      parameters:
+      - description: nfs
+        in: body
+        name: nfs
+        required: true
+        schema:
+          $ref: '#/definitions/models.NFSPath'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      security:
+      - basic: []
+      summary: NFS服务创建
+      tags:
+      - NFS服务
+  /app/nfs/path/del:
+    delete:
+      consumes:
+      - application/json
+      description: NFS服务删除
+      parameters:
+      - description: nfs
+        in: body
+        name: nfs
+        required: true
+        schema:
+          $ref: '#/definitions/models.NFSInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      security:
+      - basic: []
+      summary: NFS服务删除
+      tags:
+      - NFS服务
+  /app/nfs/path/lst/{address}:
+    get:
+      consumes:
+      - application/json
+      description: NFS服务查看
+      parameters:
+      - description: address
+        in: path
+        name: address
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      security:
+      - basic: []
+      summary: NFS服务查看
       tags:
       - NFS服务
   /app/rabbitmq/install:
@@ -132,11 +514,106 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Err'
+      security:
+      - basic: []
       summary: RabbitMQ服务安装
+      tags:
+      - RabbitMQ服务
+  /app/rabbitmq/permission/add:
+    put:
+      consumes:
+      - application/json
+      description: RabbitMQ权限添加
+      parameters:
+      - description: permission
+        in: body
+        name: permission
+        required: true
+        schema:
+          $ref: '#/definitions/models.NewRabbitPermission'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      summary: RabbitMQ权限添加
+      tags:
+      - RabbitMQ服务
+  /app/rabbitmq/permission/del:
+    delete:
+      consumes:
+      - application/json
+      description: RabbitMQ权限删除
+      parameters:
+      - description: permission
+        in: body
+        name: permission
+        required: true
+        schema:
+          $ref: '#/definitions/models.ComRabbitPermission'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      summary: RabbitMQ权限删除
+      tags:
+      - RabbitMQ服务
+  /app/rabbitmq/permission/lst/{address}:
+    get:
+      consumes:
+      - application/json
+      description: RabbitMQ权限列表
+      parameters:
+      - description: address
+        in: path
+        name: address
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      summary: RabbitMQ权限列表
       tags:
       - RabbitMQ服务
   /app/rabbitmq/user/add:
@@ -234,12 +711,12 @@ paths:
       - application/json
       description: RabbitMQ虚拟机添加
       parameters:
-      - description: user
+      - description: vhost
         in: body
-        name: user
+        name: vhost
         required: true
         schema:
-          $ref: '#/definitions/models.NewRabbitUser'
+          $ref: '#/definitions/models.NewRabbitVhost'
       produces:
       - application/json
       responses:
@@ -264,12 +741,12 @@ paths:
       - application/json
       description: RabbitMQ虚拟机删除
       parameters:
-      - description: server
+      - description: vhost
         in: body
-        name: server
+        name: vhost
         required: true
         schema:
-          $ref: '#/definitions/models.ServerDetail'
+          $ref: '#/definitions/models.NewRabbitVhost'
       produces:
       - application/json
       responses:
@@ -340,10 +817,16 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Err'
+      security:
+      - basic: []
       summary: 单台服务器初始化
       tags:
       - 服务器
@@ -370,14 +853,23 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Err'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Err'
+      security:
+      - basic: []
       summary: 批量服务器初始化
       tags:
       - 服务器
 schemes:
 - http
 - https
+securityDefinitions:
+  basic:
+    type: basic
 swagger: "2.0"

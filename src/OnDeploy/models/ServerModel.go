@@ -2,11 +2,11 @@ package models
 
 // 请求
 type ServerDetail struct {
-	Name string `json:"name"`
-	Address string `json:"address"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Port uint `json:"port"`
+	Name string `json:"name,omitempty"`
+	Address string `json:"address,omitempty"`
+	//Username string `json:"username,omitempty"`
+	//Password string `json:"password,omitempty"`
+	Port uint `json:"port,omitempty"`
 	// Comment string `json:"comment,omitempty"`
 }
 

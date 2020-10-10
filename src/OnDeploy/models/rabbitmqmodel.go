@@ -27,3 +27,35 @@ type RabbitVhost struct {
 }
 
 type RabbitVhosts []RabbitVhost
+
+type NewRabbitVhost struct {
+	Address string `json:"address"`
+	Vhost string `json:"vhost"`
+	Trace bool `json:"tracing"`
+}
+
+// permission
+type RabbitPermission struct {
+	User string `json:"user"`
+	Vhost string `json:"vhost"`
+	Configure string `json:"configure"`
+	Write string `json:"write"`
+	Read string `json:"read"`
+}
+
+type RabbitPermissions []RabbitPermission
+
+type NewRabbitPermission struct {
+	Address string `json:"address"`
+	User string `json:"user"`
+	Vhost string `json:"vhost"`
+	Configure string `json:"configure"`
+	Write string `json:"write"`
+	Read string `json:"read"`
+}
+
+type ComRabbitPermission struct {
+	Address string `json:"address"`
+	User string `json:"user"`
+	Vhost string `json:"vhost"`
+}

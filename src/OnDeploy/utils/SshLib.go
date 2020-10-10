@@ -25,10 +25,10 @@ type Client struct {
 	sftpClient *sftp.Client
 }
 
-func NewClient(server models.ServerDetail) *Client {
+func NewClient(server models.ServerDetail, user, pass string) *Client {
 	conf := &ssh.ClientConfig{
-		User:            server.Username,
-		Auth:            []ssh.AuthMethod{ssh.Password(server.Password)},
+		User:            user,
+		Auth:            []ssh.AuthMethod{ssh.Password(pass)},
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 		Timeout:         3 * time.Second,
 	}
